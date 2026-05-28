@@ -5,169 +5,110 @@ import {
   RotateCw,
   FileStack,
   Lock,
-  Minimize2,
   FileType,
-  ScanText,
   Shield,
   Clock,
   Key,
+  ArrowRight,
 } from "lucide-react";
-
-const tools = [
-  {
-    path: "/merge",
-    name: "Merge PDF",
-    description: "Combine multiple PDFs into one document",
-    icon: Merge,
-    color: "bg-blue-500",
-  },
-  {
-    path: "/split",
-    name: "Split PDF",
-    description: "Split a PDF into separate files",
-    icon: Scissors,
-    color: "bg-green-500",
-  },
-  {
-    path: "/rotate",
-    name: "Rotate PDF",
-    description: "Rotate pages in your PDF",
-    icon: RotateCw,
-    color: "bg-purple-500",
-  },
-  {
-    path: "/pages",
-    name: "Manage Pages",
-    description: "Delete, reorder, or extract pages",
-    icon: FileStack,
-    color: "bg-orange-500",
-  },
-  {
-    path: "/protect",
-    name: "Protect PDF",
-    description: "Add or remove password protection",
-    icon: Lock,
-    color: "bg-red-500",
-  },
-  {
-    path: "/compress",
-    name: "Compress PDF",
-    description: "Reduce PDF file size",
-    icon: Minimize2,
-    color: "bg-teal-500",
-  },
-  {
-    path: "/convert",
-    name: "Convert",
-    description: "PDF to images, images to PDF, watermark",
-    icon: FileType,
-    color: "bg-indigo-500",
-  },
-  {
-    path: "/ocr",
-    name: "OCR",
-    description: "Extract text to Word or Excel",
-    icon: ScanText,
-    color: "bg-pink-500",
-  },
-];
-
-const privacyFeatures = [
-  {
-    icon: Shield,
-    title: "No Cloud Storage",
-    description: "Files are processed locally and never stored permanently on our servers",
-  },
-  {
-    icon: Clock,
-    title: "Auto-Delete",
-    description: "All uploaded files are automatically deleted after 30 minutes",
-  },
-  {
-    icon: Key,
-    title: "API Keys Stay Private",
-    description: "Your AI API keys are only stored in your browser session",
-  },
-];
+import { useLangStore } from "@/store/language";
 
 export default function HomePage() {
+  const { tr } = useLangStore();
+
+  const tools = [
+    { path: "/merge", name: tr.mergePdf, description: tr.mergeDesc, icon: Merge, color: "bg-blue-600", shadow: "shadow-blue-500/20" },
+    { path: "/split", name: tr.splitPdf, description: tr.splitDesc, icon: Scissors, color: "bg-emerald-600", shadow: "shadow-emerald-500/20" },
+    { path: "/rotate", name: tr.rotate, description: tr.rotateDesc, icon: RotateCw, color: "bg-violet-600", shadow: "shadow-violet-500/20" },
+    { path: "/pages", name: tr.pages, description: tr.pagesDesc, icon: FileStack, color: "bg-orange-600", shadow: "shadow-orange-500/20" },
+    { path: "/protect", name: tr.protect, description: tr.protectDesc, icon: Lock, color: "bg-rose-600", shadow: "shadow-rose-500/20" },
+    { path: "/convert", name: tr.convert, description: tr.convertDesc, icon: FileType, color: "bg-indigo-600", shadow: "shadow-indigo-500/20" },
+  ];
+
+  const privacyFeatures = [
+    { icon: Shield, title: tr.noStorage, description: tr.noStorageDesc },
+    { icon: Clock, title: tr.autoDelete, description: tr.autoDeleteDesc },
+    { icon: Key, title: tr.apiKeyPrivate, description: tr.apiKeyPrivateDesc },
+  ];
+
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="text-center py-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-          Professional PDF Tools
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Process your PDFs securely and efficiently. No permanent storage, no data
-          collection — your files stay private.
-        </p>
+    <div className="space-y-14">
+      {/* Hero */}
+      <section className="relative rounded-2xl overflow-hidden bg-[#0f172a] px-8 py-14 text-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-[#0f172a] to-indigo-900/30 pointer-events-none" />
+        <div className="relative z-10">
+          <span className="inline-block mb-4 px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-600/20 text-blue-300 border border-blue-500/30 uppercase tracking-widest">
+            PDF Toolkit
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            {tr.heroTitle}
+          </h1>
+          <p className="text-lg text-slate-400 max-w-xl mx-auto">{tr.heroSubtitle}</p>
+        </div>
       </section>
 
       {/* Tools Grid */}
       <section>
-        <h2 className="text-2xl font-bold mb-6">All Tools</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <h2 className="text-xl font-bold mb-5 text-slate-700">{tr.allTools}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {tools.map((tool) => (
             <Link
               key={tool.path}
               to={tool.path}
-              className="group bg-white rounded-xl border border-border p-6 hover:shadow-lg hover:border-primary/30 transition-all"
+              className="group bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex gap-4 items-start"
             >
               <div
-                className={`w-12 h-12 rounded-lg ${tool.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                className={`w-11 h-11 rounded-xl ${tool.color} ${tool.shadow} shadow-lg flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}
               >
-                <tool.icon className="w-6 h-6 text-white" />
+                <tool.icon className="w-5 h-5 text-white" />
               </div>
-              <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
-                {tool.name}
-              </h3>
-              <p className="text-sm text-muted-foreground">{tool.description}</p>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                </div>
+                <p className="text-sm text-slate-500 mt-0.5 leading-snug">{tool.description}</p>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Privacy Section */}
-      <section className="bg-white rounded-xl border border-border p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center">Your Privacy Matters</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {privacyFeatures.map((feature, index) => (
-            <div key={index} className="text-center">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <feature.icon className="w-8 h-8 text-primary" />
+      {/* How it works */}
+      <section className="bg-white rounded-2xl border border-slate-200 p-8">
+        <h2 className="text-xl font-bold mb-8 text-center text-slate-800">{tr.howItWorks}</h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+          {[tr.step1, tr.step2, tr.step3].map((step, i) => (
+            <div key={i} className="flex items-center gap-4">
+              <div className="flex flex-col items-center gap-2">
+                <span className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30">
+                  {i + 1}
+                </span>
+                <span className="font-medium text-slate-700 text-sm text-center">{step}</span>
               </div>
-              <h3 className="font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.description}</p>
+              {i < 2 && (
+                <ArrowRight className="hidden md:block w-5 h-5 text-slate-300 shrink-0 mt-[-18px]" />
+              )}
             </div>
           ))}
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="text-center">
-        <h2 className="text-2xl font-bold mb-6">How It Works</h2>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-          <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-              1
-            </span>
-            <span className="font-medium">Upload your PDF</span>
-          </div>
-          <div className="hidden md:block w-12 h-0.5 bg-border" />
-          <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-              2
-            </span>
-            <span className="font-medium">Choose your tool</span>
-          </div>
-          <div className="hidden md:block w-12 h-0.5 bg-border" />
-          <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-              3
-            </span>
-            <span className="font-medium">Download result</span>
-          </div>
+      {/* Privacy */}
+      <section className="bg-[#0f172a] rounded-2xl p-8">
+        <h2 className="text-xl font-bold mb-8 text-center text-white">{tr.privacyTitle}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {privacyFeatures.map((feature, i) => (
+            <div key={i} className="text-center">
+              <div className="w-14 h-14 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                <feature.icon className="w-6 h-6 text-blue-400" />
+              </div>
+              <h3 className="font-semibold text-white mb-2 text-sm">{feature.title}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>

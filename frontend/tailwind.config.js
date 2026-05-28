@@ -12,7 +12,7 @@ export default {
         border: "#e2e8f0",
         input: "#e2e8f0",
         ring: "#2563eb",
-        background: "#ffffff",
+        background: "#f1f5f9",
         foreground: "#0f172a",
       },
       borderRadius: { lg: "0.75rem", md: "0.5rem", sm: "0.25rem" },
