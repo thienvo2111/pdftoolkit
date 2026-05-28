@@ -210,8 +210,9 @@ export default function ConvertPage() {
       });
       setResultFile(res.data.output_filename);
       toast.success("PDF created successfully!");
-    } catch (error) {
-      toast.error("Conversion failed");
+    } catch (error: unknown) {
+      const detail = (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      toast.error(detail || "Conversion failed", { duration: 8000 });
     } finally {
       setIsProcessing(false);
     }
@@ -233,8 +234,9 @@ export default function ConvertPage() {
       });
       setResultFile(res.data.output_filename);
       toast.success("Watermark added successfully!");
-    } catch (error) {
-      toast.error("Failed to add watermark");
+    } catch (error: unknown) {
+      const detail = (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      toast.error(detail || "Failed to add watermark", { duration: 8000 });
     } finally {
       setIsProcessing(false);
     }

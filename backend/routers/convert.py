@@ -1,5 +1,4 @@
 import logging
-import io
 from typing import List, Optional, Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -77,15 +76,10 @@ async def images_to_pdf(req: FromImagesRequest):
         doc = fitz.open()
         for filename in req.filenames:
             file_path = session_manager.get_file_path(req.session_id, filename)
-            img = Image.open(str(file_path)).convert("RGB")
-            img_bytes = io.BytesIO()
-            img.save(img_bytes, format="PNG")
-            img_bytes.seek(0)
-            img_doc = fitz.open("png", img_bytes.read())
-            rect = img_doc[0].rect
-            page = doc.new_page(width=rect.width, height=rect.height)
-            page.show_pdf_page(rect, img_doc, 0)
-            img_doc.close()
+            with Image.open(str(file_path)) as pil_img:
+                w, h = pil_img.size
+            page = doc.new_page(width=w, height=h)
+            page.insert_image(fitz.Rect(0, 0, w, h), filename=str(file_path))
         doc.save(str(output_path))
         doc.close()
         return {"output_filename": output_name, "pages": len(req.filenames)}
