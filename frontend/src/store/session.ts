@@ -16,25 +16,41 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   files: [],
 
   initSession: async () => {
-    let sessionId = sessionStorage.getItem("pdftool_session_id");
-    if (!sessionId) {
-      let attempts = 0;
-      while (attempts < 3) {
+    const createNewSession = async (): Promise<string | null> => {
+      for (let i = 0; i < 3; i++) {
         try {
           const res = await api.post("/api/session/create");
-          sessionId = res.data.session_id;
-          sessionStorage.setItem("pdftool_session_id", sessionId!);
-          break;
+          const id = res.data.session_id as string;
+          sessionStorage.setItem("pdftool_session_id", id);
+          return id;
         } catch {
-          attempts++;
-          if (attempts < 3) await new Promise((r) => setTimeout(r, 1500));
+          if (i < 2) await new Promise((r) => setTimeout(r, 1500));
         }
       }
+      return null;
+    };
+
+    let sessionId = sessionStorage.getItem("pdftool_session_id");
+
+    if (sessionId) {
+      // Verify the session still exists on the server
+      try {
+        await api.get(`/api/session/${sessionId}/files`);
+      } catch {
+        // Session expired or server restarted — create a fresh one
+        sessionStorage.removeItem("pdftool_session_id");
+        sessionId = null;
+      }
+    }
+
+    if (!sessionId) {
+      sessionId = await createNewSession();
       if (!sessionId) {
         console.warn("Could not create session after 3 attempts");
         return;
       }
     }
+
     set({ sessionId });
     try {
       await get().refreshFiles();
