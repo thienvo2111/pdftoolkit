@@ -11,6 +11,51 @@ router = APIRouter()
 session_manager = SessionManager()
 logger = logging.getLogger(__name__)
 
+def _add_page_to_docx(word_doc, page, page_num: int):
+    """Extract text with formatting from a PDF page and add to docx."""
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Pt
+
+    word_doc.add_heading(f"Page {page_num}", level=1)
+    page_dict = page.get_text("dict")
+    page_width = page.rect.width
+
+    for block in page_dict.get("blocks", []):
+        if block.get("type") != 0:
+            continue
+        bbox = block["bbox"]
+        block_x0, block_x1 = bbox[0], bbox[2]
+        block_center = (block_x0 + block_x1) / 2
+
+        if block_x0 > page_width * 0.45:
+            alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        elif page_width * 0.3 < block_center < page_width * 0.7:
+            alignment = WD_ALIGN_PARAGRAPH.CENTER
+        else:
+            alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+        for line in block.get("lines", []):
+            spans = line.get("spans", [])
+            line_text = "".join(s["text"] for s in spans)
+            if not line_text.strip():
+                continue
+
+            para = word_doc.add_paragraph()
+            para.alignment = alignment
+
+            for span in spans:
+                text = span.get("text", "")
+                if not text:
+                    continue
+                flags = span.get("flags", 0)
+                is_bold = bool(flags & (1 << 4))
+                is_italic = bool(flags & (1 << 1))
+                size = span.get("size", 12)
+                run = para.add_run(text)
+                run.bold = is_bold
+                run.italic = is_italic
+                run.font.size = Pt(round(size))
+
 class OCRRequest(BaseModel):
     session_id: str
     filename: str
@@ -41,23 +86,29 @@ async def ocr_pdf(req: OCRRequest):
             for p in target_pages:
                 if p < 1 or p > total:
                     raise HTTPException(status_code=400, detail=f"Page {p} out of range")
-                pix = doc[p - 1].get_pixmap(matrix=mat)
-                png_bytes = pix.tobytes("png")
                 if use_ai:
+                    pix = doc[p - 1].get_pixmap(matrix=mat)
+                    png_bytes = pix.tobytes("png")
                     text = await ai_clients.get_ocr_result(png_bytes, req.ai_provider, req.ai_api_key, req.ai_model)
                 else:
-                    # Dùng PyMuPDF extract text trực tiếp - không cần cài thêm gì
                     text = doc[p - 1].get_text("text")
                 page_texts.append((p, text))
         if req.output_format == "docx":
             from docx import Document
             word_doc = Document()
             word_doc.add_heading(base_name, 0)
-            for page_num, text in page_texts:
-                word_doc.add_heading(f"Page {page_num}", level=1)
-                for para in text.split("\n\n"):
-                    if para.strip():
-                        word_doc.add_paragraph(para.strip())
+            if use_ai:
+                # AI returns plain text — split into paragraphs
+                for page_num, text in page_texts:
+                    word_doc.add_heading(f"Page {page_num}", level=1)
+                    for para in text.split("\n\n"):
+                        if para.strip():
+                            word_doc.add_paragraph(para.strip())
+            else:
+                # Re-extract with dict to preserve formatting
+                with fitz.open(str(file_path)) as doc2:
+                    for page_num, _ in page_texts:
+                        _add_page_to_docx(word_doc, doc2[page_num - 1], page_num)
             word_doc.save(str(output_path))
         else:
             from openpyxl import Workbook
