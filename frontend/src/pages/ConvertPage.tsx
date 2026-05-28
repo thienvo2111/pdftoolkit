@@ -205,10 +205,10 @@ export default function ConvertPage() {
     try {
       const res = await api.post("/api/pdf/from-images", {
         session_id: sessionId,
-        images: imageFiles.map((f) => f.name),
-        output_filename: outputFilename,
+        filenames: imageFiles.map((f) => f.name),
+        output_name: outputFilename,
       });
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("PDF created successfully!");
     } catch (error) {
       toast.error("Conversion failed");
@@ -231,7 +231,7 @@ export default function ConvertPage() {
         angle: angle,
         color: color,
       });
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("Watermark added successfully!");
     } catch (error) {
       toast.error("Failed to add watermark");
