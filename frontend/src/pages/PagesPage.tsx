@@ -32,8 +32,8 @@ export default function PagesPage() {
     try {
       const result = await uploadFile(files[0]);
       setUploadedFile({ name: result.filename, pages: result.pages });
-      // For reorder, initialize with all pages in order
-      if (activeTab === "reorder") {
+      // reorder và extract cần khởi tạo tất cả trang; delete bắt đầu rỗng
+      if (activeTab === "reorder" || activeTab === "extract") {
         setSelectedPages(Array.from({ length: result.pages }, (_, i) => i + 1));
       } else {
         setSelectedPages([]);
@@ -49,11 +49,9 @@ export default function PagesPage() {
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
+    setUploadedFile(null);
     setSelectedPages([]);
     setResultFile(null);
-    if (uploadedFile && tab === "reorder") {
-      setSelectedPages(Array.from({ length: uploadedFile.pages }, (_, i) => i + 1));
-    }
   };
 
   const handleProcess = async () => {

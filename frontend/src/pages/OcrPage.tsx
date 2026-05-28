@@ -84,8 +84,9 @@ export default function OcrPage() {
       const res = await api.post("/api/pdf/ocr", payload);
       setResultFile(res.data.output_filename);
       toast.success("OCR completed successfully!");
-    } catch (error) {
-      toast.error("OCR processing failed");
+    } catch (error: unknown) {
+      const detail = (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      toast.error(detail || "OCR processing failed", { duration: 8000 });
     } finally {
       setIsProcessing(false);
     }
