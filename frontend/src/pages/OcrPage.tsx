@@ -67,9 +67,9 @@ export default function OcrPage() {
         session_id: sessionId,
         filename: uploadedFile.name,
         output_format: outputFormat,
-        language: language,
+        lang: language,
         pages: useAllPages ? null : selectedPages,
-        output_filename: `${outputFilename}.${outputFormat}`,
+        output_name: `${outputFilename}.${outputFormat}`,
       };
 
       // Add AI configuration if available
@@ -82,7 +82,7 @@ export default function OcrPage() {
       }
 
       const res = await api.post("/api/pdf/ocr", payload);
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("OCR completed successfully!");
     } catch (error) {
       toast.error("OCR processing failed");

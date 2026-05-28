@@ -13,7 +13,7 @@ export default function SplitPage() {
   const [isSplitting, setIsSplitting] = useState(false);
   const [mode, setMode] = useState<"each" | "ranges">("each");
   const [selectedPages, setSelectedPages] = useState<number[]>([]);
-  const [resultFiles, setResultFiles] = useState<string[]>([]);
+  const [resultFiles, setResultFiles] = useState<Array<{ name: string; pages: number }>>([]);
 
   const handleFileAdded = async (files: File[]) => {
     if (files.length === 0) return;
@@ -172,12 +172,12 @@ export default function SplitPage() {
           <div className="space-y-2">
             {resultFiles.map((file) => (
               <div
-                key={file}
+                key={file.name}
                 className="flex items-center justify-between bg-white rounded-lg px-4 py-3 border border-green-200"
               >
-                <span className="font-medium">{file}</span>
+                <span className="font-medium">{file.name}</span>
                 <button
-                  onClick={() => downloadFile(file)}
+                  onClick={() => downloadFile(file.name)}
                   className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
                 >
                   <Download className="w-4 h-4" />

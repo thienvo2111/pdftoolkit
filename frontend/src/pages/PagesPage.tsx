@@ -75,26 +75,26 @@ export default function PagesPage() {
       let payload: Record<string, unknown> = {
         session_id: sessionId,
         filename: uploadedFile.name,
-        output_filename: outputFilename,
+        output_name: outputFilename,
       };
 
       switch (activeTab) {
         case "delete":
-          endpoint = "/api/pdf/delete-pages";
+          endpoint = "/api/pdf/pages/delete";
           payload.pages = selectedPages;
           break;
         case "reorder":
-          endpoint = "/api/pdf/reorder-pages";
-          payload.page_order = selectedPages;
+          endpoint = "/api/pdf/pages/reorder";
+          payload.order = selectedPages;
           break;
         case "extract":
-          endpoint = "/api/pdf/extract-pages";
+          endpoint = "/api/pdf/pages/extract";
           payload.pages = selectedPages;
           break;
       }
 
       const res = await api.post(endpoint, payload);
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("Operation completed successfully!");
     } catch (error) {
       toast.error("Operation failed");

@@ -77,7 +77,7 @@ export default function CompressPage() {
       });
 
       setResult({
-        file: res.data.output_file,
+        file: res.data.output_filename,
         originalSize: res.data.original_size,
         compressedSize: res.data.compressed_size,
       });

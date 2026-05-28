@@ -146,10 +146,10 @@ export default function MergePage() {
       const res = await api.post("/api/pdf/merge", {
         session_id: sessionId,
         files: files.map((f) => f.name),
-        output_filename: outputFilename,
+        output_name: outputFilename,
       });
 
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("PDFs merged successfully!");
     } catch (error) {
       toast.error("Failed to merge PDFs");

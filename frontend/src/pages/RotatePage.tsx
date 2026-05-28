@@ -55,10 +55,10 @@ export default function RotatePage() {
         filename: uploadedFile.name,
         angle: angle,
         pages: applyToAll ? null : selectedPages,
-        output_filename: outputFilename,
+        output_name: outputFilename,
       });
 
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("PDF rotated successfully!");
     } catch (error) {
       toast.error("Failed to rotate PDF");

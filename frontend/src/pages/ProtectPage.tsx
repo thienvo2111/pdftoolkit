@@ -70,7 +70,7 @@ export default function ProtectPage() {
         allow_copy: allowCopy,
       });
 
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("Password protection added!");
     } catch (error) {
       toast.error("Failed to protect PDF");
@@ -94,13 +94,13 @@ export default function ProtectPage() {
     setResultFile(null);
 
     try {
-      const res = await api.post("/api/pdf/unprotect", {
+      const res = await api.post("/api/pdf/unlock", {
         session_id: sessionId,
         filename: uploadedFile.name,
         password: unlockPassword,
       });
 
-      setResultFile(res.data.output_file);
+      setResultFile(res.data.output_filename);
       toast.success("Password removed successfully!");
     } catch (error) {
       toast.error("Failed to remove password. Check if the password is correct.");
