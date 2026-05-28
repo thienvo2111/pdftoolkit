@@ -4,7 +4,6 @@ from typing import List, Optional, Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import fitz
-from PIL import Image
 from utils.session_manager import SessionManager
 from utils import ai_clients
 
@@ -47,19 +46,8 @@ async def ocr_pdf(req: OCRRequest):
                 if use_ai:
                     text = await ai_clients.get_ocr_result(png_bytes, req.ai_provider, req.ai_api_key, req.ai_model)
                 else:
-                    try:
-                        import pytesseract
-                        img = Image.open(BytesIO(png_bytes))
-                        text = pytesseract.image_to_string(img, lang=req.lang)
-                    except Exception as tess_err:
-                        if "TesseractNotFoundError" in type(tess_err).__name__ or "not installed" in str(tess_err).lower():
-                            raise HTTPException(
-                                status_code=422,
-                                detail="Tesseract OCR chưa được cài đặt trên server. "
-                                       "Vui lòng cài Tesseract (https://github.com/UB-Mannheim/tesseract/wiki) "
-                                       "hoặc sử dụng AI Provider (OpenAI / Claude / Gemini / Grok) để thay thế."
-                            )
-                        raise
+                    # Dùng PyMuPDF extract text trực tiếp - không cần cài thêm gì
+                    text = doc[p - 1].get_text("text")
                 page_texts.append((p, text))
         if req.output_format == "docx":
             from docx import Document
