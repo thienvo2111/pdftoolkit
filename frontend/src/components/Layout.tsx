@@ -37,7 +37,7 @@ export default function Layout() {
   const { sessionId, files, initSession } = useSessionStore();
 
   useEffect(() => {
-    initSession();
+    initSession().catch(() => {});
   }, [initSession]);
 
   useEffect(() => {
