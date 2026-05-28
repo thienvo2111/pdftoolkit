@@ -64,8 +64,8 @@ export default function ProtectPage() {
       const res = await api.post("/api/pdf/protect", {
         session_id: sessionId,
         filename: uploadedFile.name,
-        user_password: userPassword || null,
-        owner_password: ownerPassword || null,
+        user_password: userPassword || "",
+        owner_password: ownerPassword || "",
         allow_print: allowPrint,
         allow_copy: allowCopy,
       });
