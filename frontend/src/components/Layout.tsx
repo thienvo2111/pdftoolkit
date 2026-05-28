@@ -7,9 +7,7 @@ import {
   RotateCw,
   FileStack,
   Lock,
-  Minimize2,
   FileType,
-  ScanText,
   Menu,
   X,
   FileText,
@@ -25,9 +23,7 @@ const navItems = [
   { path: "/rotate", label: "Rotate", icon: RotateCw },
   { path: "/pages", label: "Pages", icon: FileStack },
   { path: "/protect", label: "Protect", icon: Lock },
-  { path: "/compress", label: "Compress", icon: Minimize2 },
   { path: "/convert", label: "Convert", icon: FileType },
-  { path: "/ocr", label: "OCR", icon: ScanText },
 ];
 
 export default function Layout() {
