@@ -139,17 +139,15 @@ function SortableThumb({ sessionId, filename, page, index }: SortableThumbProps)
     <div
       ref={setNodeRef}
       style={style}
+      {...attributes}
+      {...listeners}
       className={cn(
-        "relative rounded-xl border-2 border-slate-200 overflow-hidden bg-white transition-shadow",
-        isDragging && "shadow-2xl border-blue-400 opacity-80 z-50"
+        "relative rounded-xl border-2 border-slate-200 overflow-hidden bg-white transition-shadow cursor-grab active:cursor-grabbing select-none touch-none",
+        isDragging && "shadow-2xl border-blue-400 opacity-60 z-50 scale-105"
       )}
     >
-      {/* Drag handle */}
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute top-1 left-1 z-10 p-1 rounded bg-white/80 cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 transition-colors"
-      >
+      {/* Drag hint icon (visual only) */}
+      <div className="absolute top-1 left-1 z-10 p-1 rounded bg-white/80 text-slate-400 pointer-events-none">
         <GripVertical className="w-3.5 h-3.5" />
       </div>
 
@@ -203,7 +201,7 @@ export default function PDFPageGrid({
   const sid = sessionId ?? "";
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
