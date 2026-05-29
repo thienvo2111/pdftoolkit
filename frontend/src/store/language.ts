@@ -22,6 +22,13 @@ export const useLangStore = create<LangState>()(
         set({ lang: next, tr: t[next] });
       },
     }),
-    { name: "pdftool_lang" }
+    {
+      name: "pdftool_lang",
+      // Chỉ lưu lang, không lưu tr — tr luôn tính lại khi rehydrate
+      partialize: (state) => ({ lang: state.lang }),
+      onRehydrateStorage: () => (state) => {
+        if (state) state.tr = t[state.lang];
+      },
+    }
   )
 );
