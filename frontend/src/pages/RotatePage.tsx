@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RotateCw, Download, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import FileDropzone from "@/components/FileDropzone";
-import PageSelector from "@/components/PageSelector";
+import PDFPageGrid from "@/components/PDFPageGrid";
 import { useSessionStore } from "@/store/session";
 import api from "@/lib/api";
 
@@ -145,17 +145,14 @@ export default function RotatePage() {
 
             {/* Page Selection (if not applying to all) */}
             {!applyToAll && (
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Select pages to rotate
-                </label>
-                <PageSelector
-                  totalPages={uploadedFile.pages}
-                  selectedPages={selectedPages}
-                  onChange={setSelectedPages}
-                  mode="multiple"
-                />
-              </div>
+              <PDFPageGrid
+                filename={uploadedFile.name}
+                totalPages={uploadedFile.pages}
+                selectedPages={selectedPages}
+                onChange={setSelectedPages}
+                mode="multiple"
+                label="Chọn trang để xoay"
+              />
             )}
 
             {/* Output Filename */}

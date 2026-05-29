@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from utils.session_manager import SessionManager
-from routers import merge, split, rotate, pages, protect, ocr, compress, convert, session
+from routers import merge, split, rotate, pages, protect, ocr, compress, convert, session, preview
 
 logging.basicConfig(level=logging.INFO)
 scheduler = AsyncIOScheduler()
@@ -50,6 +50,7 @@ app.include_router(protect.router, prefix="/api/pdf", tags=["Protect"])
 app.include_router(ocr.router, prefix="/api/pdf", tags=["OCR"])
 app.include_router(compress.router, prefix="/api/pdf", tags=["Compress"])
 app.include_router(convert.router, prefix="/api/pdf", tags=["Convert"])
+app.include_router(preview.router, prefix="/api/pdf", tags=["Preview"])
 
 @app.get("/health")
 async def health_check():

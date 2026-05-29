@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FileStack, Download, Loader2, Trash2, ArrowUpDown, FileOutput } from "lucide-react";
 import toast from "react-hot-toast";
 import FileDropzone from "@/components/FileDropzone";
-import PageSelector from "@/components/PageSelector";
+import PDFPageGrid from "@/components/PDFPageGrid";
 import { useSessionStore } from "@/store/session";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -173,7 +173,8 @@ export default function PagesPage() {
                 {activeTab === "reorder" && "Drag pages to reorder"}
                 {activeTab === "extract" && "Select pages to extract"}
               </label>
-              <PageSelector
+              <PDFPageGrid
+                filename={uploadedFile.name}
                 totalPages={uploadedFile.pages}
                 selectedPages={selectedPages}
                 onChange={setSelectedPages}
