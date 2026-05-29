@@ -3,10 +3,13 @@ import { persist } from "zustand/middleware";
 import type { Lang } from "@/i18n";
 import { t } from "@/i18n";
 
+// Dùng union của cả 2 locale thay vì pin vào "vi"
+type Translations = (typeof t)[Lang];
+
 interface LangState {
   lang: Lang;
   toggle: () => void;
-  tr: (typeof t)["vi"];
+  tr: Translations;
 }
 
 export const useLangStore = create<LangState>()(
