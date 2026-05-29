@@ -185,9 +185,15 @@ export default function Layout() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#0f172a] border-t border-slate-800 py-4">
-        <div className="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
-          {tr.footerText}
+      <footer className="bg-[#0f172a] border-t border-slate-800 py-5">
+        <div className="max-w-7xl mx-auto px-4 space-y-1.5 text-center">
+          <p className="text-sm text-slate-500">{tr.footerText}</p>
+          <p className="text-xs text-slate-600">
+            © {new Date().getFullYear()} Bản quyền thuộc về{" "}
+            <span className="text-slate-400 font-semibold">VPTT</span>
+            {" "}· Được xây dựng với{" "}
+            <span className="text-slate-400 font-semibold">Claude Code</span>
+          </p>
         </div>
       </footer>
 
