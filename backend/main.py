@@ -1,4 +1,5 @@
 import logging
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -24,9 +25,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Đọc thêm origins từ env var ALLOWED_ORIGINS (comma-separated)
+_extra = os.getenv("ALLOWED_ORIGINS", "")
+_allowed_origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:80",
+] + [o.strip() for o in _extra.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:80"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

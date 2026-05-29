@@ -1,0 +1,32 @@
+services:
+  # ── Backend (FastAPI) ─────────────────────────────────────────────────────
+  - type: web
+    name: pdftoolkit-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    plan: free          # đổi sang "starter" nếu cần luôn bật
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: ALLOWED_ORIGINS
+        # Điền URL frontend sau khi deploy xong bước 1
+        # Ví dụ: https://pdftoolkit-frontend.onrender.com
+        value: "https://pdftoolkit-frontend.onrender.com"
+
+  # ── Frontend (React SPA) ──────────────────────────────────────────────────
+  - type: web
+    name: pdftoolkit-frontend
+    runtime: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: ./frontend/dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        # Điền URL backend sau khi deploy xong bước 1
+        # Ví dụ: https://pdftoolkit-backend.onrender.com
+        value: "https://pdftoolkit-backend.onrender.com"
