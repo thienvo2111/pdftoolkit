@@ -36,9 +36,10 @@ export const t = {
     apiKeyPrivateDesc: "API key AI chỉ lưu trong phiên làm việc của trình duyệt",
     // How it works
     howItWorks: "Cách sử dụng",
-    step1: "Tải lên PDF",
-    step2: "Chọn công cụ",
-    step3: "Tải về kết quả",
+    step1: "Chọn công cụ",
+    step2: "Tải lên PDF",
+    step3: "Tùy chỉnh",
+    step4: "Tải về kết quả",
     // Footer
     footerText: "File tự động xóa sau 30 phút để bảo vệ quyền riêng tư của bạn.",
   },
@@ -71,9 +72,10 @@ export const t = {
     apiKeyPrivate: "API Keys Stay Private",
     apiKeyPrivateDesc: "Your AI API keys are only stored in your browser session",
     howItWorks: "How It Works",
-    step1: "Upload your PDF",
-    step2: "Choose your tool",
-    step3: "Download result",
+    step1: "Choose a tool",
+    step2: "Upload your PDF",
+    step3: "Configure options",
+    step4: "Download result",
     footerText: "Files are automatically deleted after 30 minutes for your privacy.",
   },
 } as const;

@@ -79,17 +79,17 @@ export default function HomePage() {
       {/* How it works */}
       <section className="bg-white rounded-2xl border border-slate-200 p-8">
         <h2 className="text-xl font-bold mb-8 text-center text-slate-800">{tr.howItWorks}</h2>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-          {[tr.step1, tr.step2, tr.step3].map((step, i) => (
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap">
+          {[tr.step1, tr.step2, tr.step3, tr.step4].map((step, i) => (
             <div key={i} className="flex items-center gap-4">
-              <div className="flex flex-col items-center gap-2">
-                <span className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30">
+              <div className="flex flex-col items-center gap-2 w-24">
+                <span className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-blue-500/30 shrink-0">
                   {i + 1}
                 </span>
-                <span className="font-medium text-slate-700 text-sm text-center">{step}</span>
+                <span className="font-medium text-slate-700 text-sm text-center leading-tight">{step}</span>
               </div>
-              {i < 2 && (
-                <ArrowRight className="hidden md:block w-5 h-5 text-slate-300 shrink-0 mt-[-18px]" />
+              {i < 3 && (
+                <ArrowRight className="hidden md:block w-4 h-4 text-slate-300 shrink-0 mb-5" />
               )}
             </div>
           ))}
